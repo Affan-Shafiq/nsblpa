@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "810953421618",
+    "project_id": "salesbetregularapp",
+    "storage_bucket": "salesbetregularapp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:810953421618:android:40780f67e9d64e04735d2b",
+        "android_client_info": {
+          "package_name": "com.example.salesbet_pro_league"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "810953421618-fh0maf4ripq8k460l73brieuikan3152.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJLmhb99CmxeKppTpuGXMMc0a6OWmoVUE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "810953421618-fh0maf4ripq8k460l73brieuikan3152.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
