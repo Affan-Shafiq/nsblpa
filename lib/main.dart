@@ -7,6 +7,10 @@ import 'theme.dart';
 import 'models/player.dart';
 import 'services/auth_service.dart';
 import 'services/player_service.dart';
+import 'services/contract_service.dart';
+import 'services/financial_service.dart';
+import 'services/seed_service.dart';
+import 'services/conversation_service.dart';
 import 'screens/splash_screen.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/auth/signup_screen.dart';
@@ -17,6 +21,7 @@ import 'screens/endorsements/endorsements_screen.dart';
 import 'screens/finances/finances_screen.dart';
 import 'screens/messaging/messaging_screen.dart';
 import 'screens/union/union_screen.dart';
+import 'screens/dev_seed_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,6 +44,13 @@ class NSBLPAApp extends StatelessWidget {
           create: (_) => PlayerService(),
           update: (_, auth, playerService) => playerService!..updateAuth(auth),
         ),
+        ChangeNotifierProvider(create: (_) => ContractService()),
+        ChangeNotifierProvider(create: (_) => FinancialService()),
+        ChangeNotifierProxyProvider<AuthService, ConversationService>(
+          create: (context) => ConversationService(Provider.of<AuthService>(context, listen: false)),
+          update: (_, auth, conversationService) => ConversationService(auth),
+        ),
+        Provider(create: (_) => SeedService()),
       ],
       child: Consumer<AuthService>(
         builder: (context, authService, child) {
@@ -122,6 +134,10 @@ class NSBLPAApp extends StatelessWidget {
             GoRoute(
               path: '/union',
               builder: (context, state) => const UnionScreen(),
+            ),
+            GoRoute(
+              path: '/dev-seed',
+              builder: (context, state) => const DevSeedScreen(),
             ),
           ],
         ),

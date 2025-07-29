@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../../theme.dart';
 import '../../services/player_service.dart';
+import '../../services/contract_service.dart';
 import '../../models/player.dart';
 
 class ContractsScreen extends StatefulWidget {
@@ -14,6 +15,18 @@ class ContractsScreen extends StatefulWidget {
 
 class _ContractsScreenState extends State<ContractsScreen> {
   String _selectedFilter = 'all';
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final playerService = Provider.of<PlayerService>(context, listen: false);
+      final contractService = Provider.of<ContractService>(context, listen: false);
+      if (playerService.currentPlayer != null) {
+        contractService.getContractsForPlayer(playerService.currentPlayer!.userId);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +43,9 @@ class _ContractsScreenState extends State<ContractsScreen> {
           ),
         ],
       ),
-      body: Consumer<PlayerService>(
-        builder: (context, playerService, child) {
-          if (playerService.isLoading) {
+      body: Consumer2<PlayerService, ContractService>(
+        builder: (context, playerService, contractService, child) {
+          if (playerService.isLoading || contractService.isLoading) {
             return const Center(child: CircularProgressIndicator());
           }
 
@@ -41,7 +54,7 @@ class _ContractsScreenState extends State<ContractsScreen> {
             return const Center(child: Text('No player data available'));
           }
 
-          final contracts = _getFilteredContracts(player.contracts);
+          final contracts = _getFilteredContracts(contractService.contracts);
 
           return Column(
             children: [
@@ -634,12 +647,42 @@ class _AddContractDialogState extends State<_AddContractDialog> {
           child: const Text('Cancel'),
         ),
         ElevatedButton(
-          onPressed: () {
-            // TODO: Implement contract creation
-            Navigator.of(context).pop();
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Contract creation coming soon!')),
-            );
+          onPressed: () async {
+            if (_formKey.currentState!.validate() && _startDate != null && _endDate != null) {
+              final playerService = Provider.of<PlayerService>(context, listen: false);
+              final contractService = Provider.of<ContractService>(context, listen: false);
+              
+              if (playerService.currentPlayer != null) {
+                final contract = Contract(
+                  id: '',
+                  userId: playerService.currentPlayer!.userId,
+                  type: _selectedType,
+                  title: _titleController.text,
+                  description: _descriptionController.text,
+                  annualValue: double.parse(_annualValueController.text),
+                  startDate: _startDate!,
+                  endDate: _endDate!,
+                  status: 'active',
+                  documentUrl: null,
+                  incentives: [],
+                  terms: {},
+                  createdAt: DateTime.now(),
+                  updatedAt: DateTime.now(),
+                );
+
+                final success = await contractService.addContract(contract);
+                if (success) {
+                  Navigator.of(context).pop();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Contract added successfully!')),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Error: ${contractService.error}')),
+                  );
+                }
+              }
+            }
           },
           child: const Text('Add Contract'),
         ),

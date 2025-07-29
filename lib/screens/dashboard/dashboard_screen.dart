@@ -217,7 +217,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   : null,
               child: player.profileImageUrl == null
                   ? Text(
-                      player.firstName[0] + player.lastName[0],
+                      _getInitials(player.firstName, player.lastName),
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -637,5 +637,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
       ],
     );
+  }
+
+  String _getInitials(String firstName, String lastName) {
+    String firstInitial = firstName.isNotEmpty ? firstName[0].toUpperCase() : '';
+    String lastInitial = lastName.isNotEmpty ? lastName[0].toUpperCase() : '';
+    
+    if (firstInitial.isEmpty && lastInitial.isEmpty) {
+      return '?';
+    }
+    
+    return firstInitial + lastInitial;
   }
 } 

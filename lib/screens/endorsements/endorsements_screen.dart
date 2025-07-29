@@ -17,10 +17,11 @@ class _EndorsementsScreenState extends State<EndorsementsScreen> {
   String _selectedRegion = 'all';
   String _sortBy = 'value';
 
-  // Mock endorsement opportunities
+  // Mock endorsement opportunities - will be replaced with real data from Firestore
   final List<Endorsement> _availableEndorsements = [
     Endorsement(
       id: '1',
+      userId: '',
       brandName: 'Nike',
       category: 'Sports Equipment',
       description: 'Official footwear and apparel partnership for the upcoming season.',
@@ -29,9 +30,14 @@ class _EndorsementsScreenState extends State<EndorsementsScreen> {
       status: 'available',
       imageUrl: null,
       requirements: ['Active player status', 'Minimum 15 games played', 'Social media presence'],
+      startDate: null,
+      endDate: null,
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
     ),
     Endorsement(
       id: '2',
+      userId: '',
       brandName: 'Gatorade',
       category: 'Beverages',
       description: 'Hydration and sports drink endorsement deal.',
@@ -40,9 +46,14 @@ class _EndorsementsScreenState extends State<EndorsementsScreen> {
       status: 'available',
       imageUrl: null,
       requirements: ['Team endorsement', 'Game day appearances'],
+      startDate: null,
+      endDate: null,
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
     ),
     Endorsement(
       id: '3',
+      userId: '',
       brandName: 'Under Armour',
       category: 'Sports Equipment',
       description: 'Performance wear and training gear partnership.',
@@ -51,9 +62,14 @@ class _EndorsementsScreenState extends State<EndorsementsScreen> {
       status: 'available',
       imageUrl: null,
       requirements: ['Exclusive brand partnership', 'Training camp participation'],
+      startDate: null,
+      endDate: null,
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
     ),
     Endorsement(
       id: '4',
+      userId: '',
       brandName: 'McDonald\'s',
       category: 'Food & Beverages',
       description: 'Local restaurant chain endorsement and promotional appearances.',
@@ -62,9 +78,14 @@ class _EndorsementsScreenState extends State<EndorsementsScreen> {
       status: 'available',
       imageUrl: null,
       requirements: ['Local market appeal', 'Community involvement'],
+      startDate: null,
+      endDate: null,
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
     ),
     Endorsement(
       id: '5',
+      userId: '',
       brandName: 'Beats by Dre',
       category: 'Electronics',
       description: 'Headphones and audio equipment endorsement.',
@@ -73,6 +94,10 @@ class _EndorsementsScreenState extends State<EndorsementsScreen> {
       status: 'available',
       imageUrl: null,
       requirements: ['Social media promotion', 'Product integration'],
+      startDate: null,
+      endDate: null,
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
     ),
   ];
 
@@ -101,7 +126,7 @@ class _EndorsementsScreenState extends State<EndorsementsScreen> {
             child: Consumer<PlayerService>(
               builder: (context, playerService, child) {
                 final player = playerService.currentPlayer;
-                final myEndorsements = player?.endorsements ?? [];
+                final myEndorsements = <Endorsement>[]; // Will be loaded from ContractService
                 
                 return DefaultTabController(
                   length: 2,

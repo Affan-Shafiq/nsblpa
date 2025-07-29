@@ -14,6 +14,7 @@ DateTime _parseDateTime(dynamic value) {
 
 class Player {
   final String id;
+  final String userId; // Firebase Auth UID
   final String firstName;
   final String lastName;
   final String email;
@@ -24,13 +25,14 @@ class Player {
   final DateTime dateOfBirth;
   final String nationality;
   final PlayerStats stats;
-  final List<Contract> contracts;
-  final List<Endorsement> endorsements;
+  final List<String> contractIds; // References to contracts collection
+  final List<String> endorsementIds; // References to endorsements collection
   final FinancialSummary finances;
   final DateTime memberSince;
 
   Player({
     required this.id,
+    required this.userId,
     required this.firstName,
     required this.lastName,
     required this.email,
@@ -41,8 +43,8 @@ class Player {
     required this.dateOfBirth,
     required this.nationality,
     required this.stats,
-    required this.contracts,
-    required this.endorsements,
+    required this.contractIds,
+    required this.endorsementIds,
     required this.finances,
     required this.memberSince,
   });
@@ -54,6 +56,7 @@ class Player {
   factory Player.fromJson(Map<String, dynamic> json) {
     return Player(
       id: json['id'] ?? '',
+      userId: json['userId'] ?? '',
       firstName: json['firstName'] ?? '',
       lastName: json['lastName'] ?? '',
       email: json['email'] ?? '',
@@ -64,12 +67,8 @@ class Player {
       dateOfBirth: _parseDateTime(json['dateOfBirth']),
       nationality: json['nationality'] ?? '',
       stats: PlayerStats.fromJson(json['stats'] ?? {}),
-      contracts: (json['contracts'] as List? ?? [])
-          .map((c) => Contract.fromJson(c))
-          .toList(),
-      endorsements: (json['endorsements'] as List? ?? [])
-          .map((e) => Endorsement.fromJson(e))
-          .toList(),
+      contractIds: List<String>.from(json['contractIds'] ?? []),
+      endorsementIds: List<String>.from(json['endorsementIds'] ?? []),
       finances: FinancialSummary.fromJson(json['finances'] ?? {}),
       memberSince: _parseDateTime(json['memberSince']),
     );
@@ -78,6 +77,7 @@ class Player {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
+      'userId': userId,
       'firstName': firstName,
       'lastName': lastName,
       'email': email,
@@ -88,8 +88,8 @@ class Player {
       'dateOfBirth': dateOfBirth.toIso8601String(),
       'nationality': nationality,
       'stats': stats.toJson(),
-      'contracts': contracts.map((c) => c.toJson()).toList(),
-      'endorsements': endorsements.map((e) => e.toJson()).toList(),
+      'contractIds': contractIds,
+      'endorsementIds': endorsementIds,
       'finances': finances.toJson(),
       'memberSince': memberSince.toIso8601String(),
     };
@@ -162,6 +162,7 @@ class PlayerStats {
 
 class Contract {
   final String id;
+  final String userId; // Reference to the player who owns this contract
   final String type; // 'player', 'endorsement', 'sponsorship'
   final String title;
   final String description;
@@ -172,9 +173,12 @@ class Contract {
   final String? documentUrl;
   final List<String> incentives;
   final Map<String, dynamic> terms;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   Contract({
     required this.id,
+    required this.userId,
     required this.type,
     required this.title,
     required this.description,
@@ -185,6 +189,8 @@ class Contract {
     this.documentUrl,
     required this.incentives,
     required this.terms,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
   bool get isActive => status == 'active';
@@ -194,6 +200,7 @@ class Contract {
   factory Contract.fromJson(Map<String, dynamic> json) {
     return Contract(
       id: json['id'] ?? '',
+      userId: json['userId'] ?? '',
       type: json['type'] ?? '',
       title: json['title'] ?? '',
       description: json['description'] ?? '',
@@ -204,12 +211,15 @@ class Contract {
       documentUrl: json['documentUrl'],
       incentives: List<String>.from(json['incentives'] ?? []),
       terms: json['terms'] ?? {},
+      createdAt: _parseDateTime(json['createdAt']),
+      updatedAt: _parseDateTime(json['updatedAt']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
+      'userId': userId,
       'type': type,
       'title': title,
       'description': description,
@@ -220,12 +230,15 @@ class Contract {
       'documentUrl': documentUrl,
       'incentives': incentives,
       'terms': terms,
+      'createdAt': createdAt.toIso8601String(),
+      'updatedAt': updatedAt.toIso8601String(),
     };
   }
 }
 
 class Endorsement {
   final String id;
+  final String userId; // Reference to the player who owns this endorsement
   final String brandName;
   final String category;
   final String description;
@@ -236,9 +249,12 @@ class Endorsement {
   final List<String> requirements;
   final DateTime? startDate;
   final DateTime? endDate;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   Endorsement({
     required this.id,
+    required this.userId,
     required this.brandName,
     required this.category,
     required this.description,
@@ -249,6 +265,8 @@ class Endorsement {
     required this.requirements,
     this.startDate,
     this.endDate,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
   bool get isAvailable => status == 'available';
@@ -257,6 +275,7 @@ class Endorsement {
   factory Endorsement.fromJson(Map<String, dynamic> json) {
     return Endorsement(
       id: json['id'] ?? '',
+      userId: json['userId'] ?? '',
       brandName: json['brandName'] ?? '',
       category: json['category'] ?? '',
       description: json['description'] ?? '',
@@ -267,12 +286,15 @@ class Endorsement {
       requirements: List<String>.from(json['requirements'] ?? []),
       startDate: json['startDate'] != null ? _parseDateTime(json['startDate']) : null,
       endDate: json['endDate'] != null ? _parseDateTime(json['endDate']) : null,
+      createdAt: _parseDateTime(json['createdAt']),
+      updatedAt: _parseDateTime(json['updatedAt']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
+      'userId': userId,
       'brandName': brandName,
       'category': category,
       'description': description,
@@ -283,6 +305,8 @@ class Endorsement {
       'requirements': requirements,
       'startDate': startDate?.toIso8601String(),
       'endDate': endDate?.toIso8601String(),
+      'createdAt': createdAt.toIso8601String(),
+      'updatedAt': updatedAt.toIso8601String(),
     };
   }
 }
@@ -365,6 +389,7 @@ class FinancialRecord {
 
 class Transaction {
   final String id;
+  final String userId; // Reference to the player who owns this transaction
   final String description;
   final double amount;
   final String type; // 'income', 'expense'
@@ -374,6 +399,7 @@ class Transaction {
 
   Transaction({
     required this.id,
+    required this.userId,
     required this.description,
     required this.amount,
     required this.type,
@@ -385,6 +411,7 @@ class Transaction {
   factory Transaction.fromJson(Map<String, dynamic> json) {
     return Transaction(
       id: json['id'] ?? '',
+      userId: json['userId'] ?? '',
       description: json['description'] ?? '',
       amount: (json['amount'] ?? 0).toDouble(),
       type: json['type'] ?? '',
@@ -397,6 +424,7 @@ class Transaction {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
+      'userId': userId,
       'description': description,
       'amount': amount,
       'type': type,
