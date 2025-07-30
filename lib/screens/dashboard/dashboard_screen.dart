@@ -80,38 +80,40 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                     ),
                     const SizedBox(height: 24),
-                    ElevatedButton.icon(
-                      onPressed: () async {
-                        final authService = Provider.of<AuthService>(context, listen: false);
-                        final seedService = SeedService();
-                        if (authService.user != null) {
-                          await seedService.seedPlayerData(authService.user!.uid);
-                          // Refresh player data
-                          final playerService = Provider.of<PlayerService>(context, listen: false);
-                          playerService.updateAuth(authService);
-                        }
-                      },
-                      icon: const Icon(Icons.data_usage),
-                      label: const Text('Seed Sample Data'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primary,
-                        foregroundColor: Colors.white,
+                    if (player?.role == 'admin') ...[
+                      ElevatedButton.icon(
+                        onPressed: () async {
+                          final authService = Provider.of<AuthService>(context, listen: false);
+                          final seedService = SeedService();
+                          if (authService.user != null) {
+                            await seedService.seedPlayerData(authService.user!.uid);
+                            // Refresh player data
+                            final playerService = Provider.of<PlayerService>(context, listen: false);
+                            playerService.updateAuth(authService);
+                          }
+                        },
+                        icon: const Icon(Icons.data_usage),
+                        label: const Text('Seed Sample Data'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primary,
+                          foregroundColor: Colors.white,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 16),
-                    TextButton.icon(
-                      onPressed: () async {
-                        final seedService = SeedService();
-                        await seedService.seedMultiplePlayers();
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Sample players seeded successfully!'),
-                          ),
-                        );
-                      },
-                      icon: const Icon(Icons.group_add),
-                      label: const Text('Seed Multiple Players'),
-                    ),
+                      const SizedBox(height: 16),
+                      TextButton.icon(
+                        onPressed: () async {
+                          final seedService = SeedService();
+                          await seedService.seedMultiplePlayers();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Sample players seeded successfully!'),
+                            ),
+                          );
+                        },
+                        icon: const Icon(Icons.group_add),
+                        label: const Text('Seed Multiple Players'),
+                      ),
+                    ],
                   ],
                 ),
               ),
@@ -187,6 +189,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     // Quick Actions
                     _buildQuickActions(),
                     const SizedBox(height: 20),
+
+                    // Admin Actions (if user is admin)
+                    if (player.role == 'admin') ...[
+                      _buildAdminActions(),
+                      const SizedBox(height: 20),
+                    ],
 
                     // Union Updates
                     _buildUnionUpdates(),
@@ -630,6 +638,67 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: AppColors.subtitle,
                   ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildAdminActions() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Admin Actions',
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 16),
+        Card(
+          elevation: 2,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Icon(Icons.admin_panel_settings, color: AppColors.primary, size: 32),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Admin Panel',
+                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            'Manage endorsements and approve requests',
+                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: AppColors.subtitle,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        context.go('/admin');
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: Colors.white,
+                      ),
+                      child: const Text('Access'),
+                    ),
+                  ],
                 ),
               ],
             ),

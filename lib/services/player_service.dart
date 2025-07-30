@@ -113,6 +113,7 @@ class PlayerService extends ChangeNotifier {
         recentTransactions: [],
       ),
       memberSince: DateTime.now(),
+      role: 'player', // Default role for new players
     );
   }
 
@@ -222,6 +223,7 @@ class PlayerService extends ChangeNotifier {
         endorsementIds: endorsements.map((e) => e.id).toList(),
         finances: updatedFinances,
         memberSince: _currentPlayer!.memberSince,
+        role: _currentPlayer!.role,
       );
 
       // Update finances in Firestore
@@ -341,6 +343,7 @@ class PlayerService extends ChangeNotifier {
         endorsementIds: _currentPlayer!.endorsementIds,
         finances: _currentPlayer!.finances,
         memberSince: _currentPlayer!.memberSince,
+        role: _currentPlayer!.role,
       );
 
       _isLoading = false;
@@ -378,6 +381,7 @@ class PlayerService extends ChangeNotifier {
         endorsementIds: _currentPlayer!.endorsementIds,
         finances: _currentPlayer!.finances,
         memberSince: _currentPlayer!.memberSince,
+        role: _currentPlayer!.role,
       );
 
       notifyListeners();

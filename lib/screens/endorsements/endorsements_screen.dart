@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../theme.dart';
 import '../../models/player.dart';
 import '../../services/player_service.dart';
+import '../../services/auth_service.dart';
+import '../../services/endorsement_service.dart';
 
 class EndorsementsScreen extends StatefulWidget {
   const EndorsementsScreen({super.key});
@@ -102,6 +105,17 @@ class _EndorsementsScreenState extends State<EndorsementsScreen> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    // Load endorsements when screen initializes
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final endorsementService = Provider.of<EndorsementService>(context, listen: false);
+      endorsementService.loadAvailableEndorsements();
+      endorsementService.loadMyEndorsements();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -123,11 +137,12 @@ class _EndorsementsScreenState extends State<EndorsementsScreen> {
           
           // Endorsements List
           Expanded(
-            child: Consumer<PlayerService>(
-              builder: (context, playerService, child) {
-                final player = playerService.currentPlayer;
-                final myEndorsements = <Endorsement>[]; // Will be loaded from ContractService
-                
+            child: Consumer<EndorsementService>(
+              builder: (context, endorsementService, child) {
+                if (endorsementService.isLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
                 return DefaultTabController(
                   length: 2,
                   child: Column(
@@ -150,8 +165,8 @@ class _EndorsementsScreenState extends State<EndorsementsScreen> {
                       Expanded(
                         child: TabBarView(
                           children: [
-                            _buildAvailableEndorsements(),
-                            _buildMyEndorsements(myEndorsements),
+                            _buildAvailableEndorsements(endorsementService),
+                            _buildMyEndorsements(endorsementService),
                           ],
                         ),
                       ),
@@ -204,8 +219,8 @@ class _EndorsementsScreenState extends State<EndorsementsScreen> {
     );
   }
 
-  Widget _buildAvailableEndorsements() {
-    final filteredEndorsements = _getFilteredEndorsements();
+  Widget _buildAvailableEndorsements(EndorsementService endorsementService) {
+    final filteredEndorsements = _getFilteredEndorsements(endorsementService.availableEndorsements);
     
     if (filteredEndorsements.isEmpty) {
       return _buildEmptyState('No endorsement opportunities available');
@@ -220,22 +235,22 @@ class _EndorsementsScreenState extends State<EndorsementsScreen> {
     );
   }
 
-  Widget _buildMyEndorsements(List<Endorsement> endorsements) {
-    if (endorsements.isEmpty) {
+  Widget _buildMyEndorsements(EndorsementService endorsementService) {
+    if (endorsementService.myEndorsements.isEmpty) {
       return _buildEmptyState('No active endorsements');
     }
 
     return ListView.builder(
       padding: const EdgeInsets.all(16.0),
-      itemCount: endorsements.length,
+      itemCount: endorsementService.myEndorsements.length,
       itemBuilder: (context, index) {
-        return _buildEndorsementCard(endorsements[index], isAvailable: false);
+        return _buildEndorsementCard(endorsementService.myEndorsements[index], isAvailable: false);
       },
     );
   }
 
-  List<Endorsement> _getFilteredEndorsements() {
-    var filtered = _availableEndorsements;
+  List<Endorsement> _getFilteredEndorsements(List<Endorsement> endorsements) {
+    var filtered = endorsements;
     
     if (_selectedCategory != 'all') {
       filtered = filtered.where((e) => e.category == _selectedCategory).toList();
@@ -468,7 +483,9 @@ class _EndorsementsScreenState extends State<EndorsementsScreen> {
     );
   }
 
-  void _applyForEndorsement(Endorsement endorsement) {
+  void _applyForEndorsement(Endorsement endorsement) async {
+    final endorsementService = Provider.of<EndorsementService>(context, listen: false);
+    
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -502,14 +519,29 @@ class _EndorsementsScreenState extends State<EndorsementsScreen> {
             child: const Text('Cancel'),
           ),
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
               Navigator.of(context).pop();
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Application submitted for ${endorsement.brandName}!'),
-                  backgroundColor: AppColors.success,
-                ),
-              );
+              
+              final success = await endorsementService.requestEndorsement(endorsement);
+              
+              if (success && mounted) {
+                // Refresh available endorsements to hide the applied one
+                await endorsementService.loadAvailableEndorsements();
+                
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Application submitted for ${endorsement.brandName}!'),
+                    backgroundColor: AppColors.success,
+                  ),
+                );
+              } else if (mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Error: ${endorsementService.error}'),
+                    backgroundColor: AppColors.danger,
+                  ),
+                );
+              }
             },
             child: const Text('Apply'),
           ),

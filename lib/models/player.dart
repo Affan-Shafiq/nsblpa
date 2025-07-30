@@ -29,6 +29,7 @@ class Player {
   final List<String> endorsementIds; // References to endorsements collection
   final FinancialSummary finances;
   final DateTime memberSince;
+  final String role; // 'player' or 'admin'
 
   Player({
     required this.id,
@@ -47,6 +48,7 @@ class Player {
     required this.endorsementIds,
     required this.finances,
     required this.memberSince,
+    required this.role,
   });
 
   String get fullName => '$firstName $lastName';
@@ -71,6 +73,7 @@ class Player {
       endorsementIds: List<String>.from(json['endorsementIds'] ?? []),
       finances: FinancialSummary.fromJson(json['finances'] ?? {}),
       memberSince: _parseDateTime(json['memberSince']),
+      role: json['role'] ?? 'player',
     );
   }
 
@@ -92,6 +95,7 @@ class Player {
       'endorsementIds': endorsementIds,
       'finances': finances.toJson(),
       'memberSince': memberSince.toIso8601String(),
+      'role': role,
     };
   }
 }

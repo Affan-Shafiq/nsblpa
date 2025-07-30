@@ -68,6 +68,7 @@ class AuthService extends ChangeNotifier {
           'email': email,
           'memberSince': FieldValue.serverTimestamp(),
           'status': 'active',
+          'role': 'player', // Default role for new signups
         });
       }
       
@@ -127,12 +128,9 @@ class AuthService extends ChangeNotifier {
           // Create player profile in Firestore
           await _firestore.collection('players').add({
             'userId': userCredential.user!.uid,
-            'firstName': userCredential.user!.displayName?.split(' ').first ?? 'Player',
-            'lastName': userCredential.user!.displayName?.split(' ').last ?? 'Name',
-            'email': userCredential.user!.email,
-            'profileImageUrl': userCredential.user!.photoURL,
             'memberSince': FieldValue.serverTimestamp(),
             'status': 'active',
+            'role': 'player', // Default role for new signups
           });
         }
       }

@@ -54,6 +54,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _nationalityController.text = player.nationality;
   }
 
+  String _getInitials(String firstName, String lastName) {
+    String firstInitial = firstName.isNotEmpty ? firstName[0].toUpperCase() : '';
+    String lastInitial = lastName.isNotEmpty ? lastName[0].toUpperCase() : '';
+    
+    if (firstInitial.isEmpty && lastInitial.isEmpty) {
+      return '?';
+    }
+    
+    return firstInitial + lastInitial;
+  }
+
   Future<void> _saveProfile() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -185,7 +196,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       : null,
                   child: player.profileImageUrl == null
                       ? Text(
-                          player.firstName[0] + player.lastName[0],
+                          _getInitials(player.firstName, player.lastName),
                           style: const TextStyle(
                             fontSize: 40,
                             fontWeight: FontWeight.bold,
