@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NSBLPA Players - Feature Graphic Generator</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f0f0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .feature-graphic {
+            width: 1024px;
+            height: 500px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .background-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(255,255,255,0.05) 0%, transparent 50%);
+        }
+        
+        .content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            color: white;
+            padding: 40px;
+        }
+        
+        .logo-container {
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            width: 120px;
+            height: 120px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+        
+        .logo-text {
+            font-size: 48px;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .app-name {
+            font-size: 72px;
+            font-weight: 900;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            letter-spacing: -2px;
+        }
+        
+        .tagline {
+            font-size: 32px;
+            font-weight: 300;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        .features {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 30px;
+        }
+        
+        .feature {
+            background: rgba(255,255,255,0.15);
+            padding: 15px 25px;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .basketball-icon {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+        }
+        
+        .basketball-1 {
+            top: 50px;
+            left: 100px;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .basketball-2 {
+            top: 100px;
+            right: 150px;
+            animation: float 3s ease-in-out infinite 1s;
+        }
+        
+        .basketball-3 {
+            bottom: 80px;
+            left: 200px;
+            animation: float 3s ease-in-out infinite 2s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .instructions {
+            padding: 30px;
+            background: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        .instructions h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .instructions ul {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .download-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 15px;
+        }
+        
+        .download-btn:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="feature-graphic" id="featureGraphic">
+            <div class="background-pattern"></div>
+            
+            <!-- Floating basketball icons -->
+            <div class="basketball-icon basketball-1">🏀</div>
+            <div class="basketball-icon basketball-2">🏀</div>
+            <div class="basketball-icon basketball-3">🏀</div>
+            
+            <div class="content">
+                <div class="logo-container">
+                    <div class="logo">
+                        <div class="logo-text">NSBLPA</div>
+                    </div>
+                </div>
+                
+                <h1 class="app-name">PLAYERS</h1>
+                <p class="tagline">Professional Basketball Management</p>
+                
+                <div class="features">
+                    <div class="feature">Contracts</div>
+                    <div class="feature">Endorsements</div>
+                    <div class="feature">Finances</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <h3>Feature Graphic Specifications:</h3>
+            <ul>
+                <li><strong>Dimensions:</strong> 1024 x 500 pixels (required for Google Play Store)</li>
+                <li><strong>Format:</strong> PNG or JPG</li>
+                <li><strong>File size:</strong> Maximum 1MB</li>
+                <li><strong>Content:</strong> No text in the bottom 20% of the image</li>
+            </ul>
+            
+            <h3>How to Save:</h3>
+            <ul>
+                <li>Right-click on the graphic above</li>
+                <li>Select "Save image as..."</li>
+                <li>Save as "feature_graphic.png"</li>
+                <li>Use this file for Google Play Console</li>
+            </ul>
+            
+            <button class="download-btn" onclick="downloadImage()">Download Feature Graphic</button>
+        </div>
+    </div>
+
+    <script>
+        function downloadImage() {
+            // Create a canvas to capture the feature graphic
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const featureGraphic = document.getElementById('featureGraphic');
+            
+            canvas.width = 1024;
+            canvas.height = 500;
+            
+            // Use html2canvas to capture the element
+            html2canvas(featureGraphic, {
+                width: 1024,
+                height: 500,
+                scale: 1,
+                useCORS: true,
+                allowTaint: true
+            }).then(function(canvas) {
+                const link = document.createElement('a');
+                link.download = 'nsblpa_players_feature_graphic.png';
+                link.href = canvas.toDataURL();
+                link.click();
+            });
+        }
+    </script>
+    
+    <!-- Include html2canvas for image capture -->
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+</body>
+</html> 

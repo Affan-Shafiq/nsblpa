@@ -7,12 +7,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:810953421618:android:40780f67e9d64e04735d2b",
+        "mobilesdk_app_id": "1:810953421618:android:3cb648432afcfc20735d2b",
         "android_client_info": {
-          "package_name": "com.example.salesbet_pro_league"
+          "package_name": "com.nsblpa.playersapp"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "810953421618-mis0ahpo5f60rr24pj5cqtu3avak45gu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nsblpa.playersapp",
+            "certificate_hash": "72083da4f42c0a71209ac52adf75488f3a24bb30"
+          }
+        },
         {
           "client_id": "810953421618-fh0maf4ripq8k460l73brieuikan3152.apps.googleusercontent.com",
           "client_type": 3
@@ -29,6 +37,13 @@
             {
               "client_id": "810953421618-fh0maf4ripq8k460l73brieuikan3152.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "810953421618-qnbkp91dkbcjmsem8t5b8eev23f6lpqb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.salesbetProLeague"
+              }
             }
           ]
         }

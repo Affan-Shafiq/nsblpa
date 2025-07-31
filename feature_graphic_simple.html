@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NSBLPA Players - Feature Graphic</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+        }
+        
+        .controls {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background: #0056b3;
+        }
+        
+        .feature-graphic {
+            width: 1024px;
+            height: 500px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid #ddd;
+        }
+        
+        /* Design 1: Blue Gradient */
+        .design-1 {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+        }
+        
+        /* Design 2: Orange Basketball Theme */
+        .design-2 {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            color: white;
+        }
+        
+        /* Design 3: Dark Professional */
+        .design-3 {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+        }
+        
+        .content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            width: 80%;
+        }
+        
+        .logo {
+            font-size: 60px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .title {
+            font-size: 80px;
+            font-weight: 900;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            letter-spacing: -2px;
+        }
+        
+        .subtitle {
+            font-size: 28px;
+            font-weight: 300;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        .features {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        .feature {
+            background: rgba(255,255,255,0.2);
+            padding: 12px 20px;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+        }
+        
+        .basketball {
+            position: absolute;
+            font-size: 40px;
+            opacity: 0.3;
+        }
+        
+        .bb1 { top: 50px; left: 100px; }
+        .bb2 { top: 100px; right: 150px; }
+        .bb3 { bottom: 80px; left: 200px; }
+        
+        .instructions {
+            max-width: 1024px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <button class="btn" onclick="changeDesign(1)">Design 1 (Blue)</button>
+        <button class="btn" onclick="changeDesign(2)">Design 2 (Orange)</button>
+        <button class="btn" onclick="changeDesign(3)">Design 3 (Dark)</button>
+        <button class="btn" onclick="downloadImage()">Download PNG</button>
+    </div>
+    
+    <div class="feature-graphic design-1" id="featureGraphic">
+        <div class="basketball bb1">🏀</div>
+        <div class="basketball bb2">🏀</div>
+        <div class="basketball bb3">🏀</div>
+        
+        <div class="content">
+            <div class="logo">NSBLPA</div>
+            <div class="title">PLAYERS</div>
+            <div class="subtitle">Professional Basketball Management</div>
+            <div class="features">
+                <div class="feature">Contracts</div>
+                <div class="feature">Endorsements</div>
+                <div class="feature">Finances</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="instructions">
+        <h3>Google Play Store Feature Graphic Requirements:</h3>
+        <ul>
+            <li><strong>Dimensions:</strong> 1024 x 500 pixels (exactly)</li>
+            <li><strong>Format:</strong> PNG or JPG</li>
+            <li><strong>File size:</strong> Maximum 1MB</li>
+            <li><strong>Important:</strong> No text in the bottom 20% of the image</li>
+            <li><strong>Content:</strong> Should represent your app's main features</li>
+        </ul>
+        
+        <h3>How to use:</h3>
+        <ol>
+            <li>Choose your preferred design using the buttons above</li>
+            <li>Click "Download PNG" to save the image</li>
+            <li>Use the downloaded file for Google Play Console</li>
+        </ol>
+    </div>
+
+    <script>
+        function changeDesign(design) {
+            const graphic = document.getElementById('featureGraphic');
+            graphic.className = `feature-graphic design-${design}`;
+        }
+        
+        function downloadImage() {
+            const graphic = document.getElementById('featureGraphic');
+            
+            // Create canvas
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 1024;
+            canvas.height = 500;
+            
+            // Use html2canvas to capture
+            html2canvas(graphic, {
+                width: 1024,
+                height: 500,
+                scale: 1,
+                useCORS: true,
+                allowTaint: true,
+                backgroundColor: null
+            }).then(function(canvas) {
+                const link = document.createElement('a');
+                link.download = 'nsblpa_players_feature_graphic.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+    </script>
+    
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+</body>
+</html> 
