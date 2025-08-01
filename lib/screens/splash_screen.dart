@@ -74,7 +74,7 @@ class _SplashScreenState extends State<SplashScreen>
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // NSBLPA Logo Placeholder
+                // NSBLPA Logo
                 Container(
                   width: 120,
                   height: 120,
@@ -89,10 +89,14 @@ class _SplashScreenState extends State<SplashScreen>
                       ),
                     ],
                   ),
-                  child: const Icon(
-                    Icons.sports_basketball,
-                    size: 60,
-                    color: AppColors.primary,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.asset(
+                      'assets/images/salesbet_player_logo.png',
+                      width: 80,
+                      height: 80,
+                      fit: BoxFit.contain,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 24),

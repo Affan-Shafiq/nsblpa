@@ -60,15 +60,63 @@ class AuthService extends ChangeNotifier {
         // Update the user field immediately
         _user = credential.user;
         
-        // Create player profile in Firestore
+        // Create comprehensive player profile in Firestore
         await _firestore.collection('players').add({
           'userId': credential.user!.uid,
           'firstName': firstName,
           'lastName': lastName,
           'email': email,
+          'profileImageUrl': null,
+          'team': 'TBD',
+          'position': 'TBD',
+          'jerseyNumber': 0,
+          'dateOfBirth': DateTime(1990, 1, 1).toIso8601String(), // Default date
+          'nationality': 'TBD',
           'memberSince': FieldValue.serverTimestamp(),
-          'status': 'active',
           'role': 'player', // Default role for new signups
+          
+          // Initialize stats
+          'stats': {
+            'gamesPlayed': 0,
+            'pointsPerGame': 0.0,
+            'reboundsPerGame': 0.0,
+            'assistsPerGame': 0.0,
+            'stealsPerGame': 0.0,
+            'blocksPerGame': 0.0,
+            'fieldGoalPercentage': 0.0,
+            'threePointPercentage': 0.0,
+            'freeThrowPercentage': 0.0,
+            'totalPoints': 0,
+            'totalRebounds': 0,
+            'totalAssists': 0,
+          },
+          
+          // Initialize empty arrays
+          'contractIds': [],
+          'endorsementIds': [],
+          
+          // Initialize finances
+          'finances': {
+            'currentSeasonEarnings': 0.0,
+            'careerEarnings': 0.0,
+            'endorsementEarnings': 0.0,
+            'contractEarnings': 0.0,
+            'yearlyEarnings': [
+              {
+                'year': 2021,
+                'earnings': 0.0,
+                'endorsements': 0.0,
+                'contracts': 0.0,
+              },
+              {
+                'year': 2022,
+                'earnings': 0.0,
+                'endorsements': 0.0,
+                'contracts': 0.0,
+              },
+            ],
+            'recentTransactions': [],
+          },
         });
       }
       
@@ -125,12 +173,63 @@ class AuthService extends ChangeNotifier {
             .get();
         
         if (querySnapshot.docs.isEmpty) {
-          // Create player profile in Firestore
+          // Create comprehensive player profile in Firestore
           await _firestore.collection('players').add({
             'userId': userCredential.user!.uid,
+            'firstName': userCredential.user!.displayName?.split(' ').first ?? '',
+            'lastName': userCredential.user!.displayName?.split(' ').skip(1).join(' ') ?? '',
+            'email': userCredential.user!.email ?? '',
+            'profileImageUrl': userCredential.user!.photoURL,
+            'team': 'TBD',
+            'position': 'TBD',
+            'jerseyNumber': 0,
+            'dateOfBirth': DateTime(1990, 1, 1).toIso8601String(), // Default date
+            'nationality': 'TBD',
             'memberSince': FieldValue.serverTimestamp(),
-            'status': 'active',
             'role': 'player', // Default role for new signups
+            
+            // Initialize stats
+            'stats': {
+              'gamesPlayed': 0,
+              'pointsPerGame': 0.0,
+              'reboundsPerGame': 0.0,
+              'assistsPerGame': 0.0,
+              'stealsPerGame': 0.0,
+              'blocksPerGame': 0.0,
+              'fieldGoalPercentage': 0.0,
+              'threePointPercentage': 0.0,
+              'freeThrowPercentage': 0.0,
+              'totalPoints': 0,
+              'totalRebounds': 0,
+              'totalAssists': 0,
+            },
+            
+            // Initialize empty arrays
+            'contractIds': [],
+            'endorsementIds': [],
+            
+            // Initialize finances
+            'finances': {
+              'currentSeasonEarnings': 0.0,
+              'endorsementEarnings': 0.0,
+              'contractEarnings': 0.0,
+              'careerEarnings': 0.0,
+              'yearlyEarnings': [
+                {
+                  'year': 2021,
+                  'earnings': 0.0,
+                  'endorsements': 0.0,
+                  'contracts': 0.0,
+                },
+                {
+                  'year': 2022,
+                  'earnings': 0.0,
+                  'endorsements': 0.0,
+                  'contracts': 0.0,
+                },
+              ],
+              'recentTransactions': [],
+            },
           });
         }
       }

@@ -258,10 +258,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     children: [
                       Icon(Icons.calendar_today, size: 14, color: AppColors.subtitle),
                       const SizedBox(width: 6),
-                      Text(
-                        'Member since ${DateFormat('MMM yyyy').format(player.memberSince)}',
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: AppColors.subtitle,
+                      Expanded(
+                        child: Text(
+                          'Member since ${DateFormat('MMM yyyy').format(player.memberSince)}',
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: AppColors.subtitle,
+                          ),
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ],

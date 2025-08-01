@@ -35,9 +35,9 @@ android {
             defaultConfig {
             applicationId = "com.nsblpa.playersapp"
             minSdk = 23
-            targetSdk = 34
-            versionCode = 2
-            versionName = "1.0.1"
+            targetSdk = 35
+            versionCode = 4
+            versionName = "1.0.3"
         }
 
     signingConfigs {
